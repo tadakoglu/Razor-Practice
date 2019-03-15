@@ -1,0 +1,67 @@
+﻿@model Urun[]
+@{
+    ViewData["Title"] = "GenisIcerik";
+    Layout = "_YeniLayout";
+}
+<a style="display:block; background-image: linear-gradient(#c4c200, #edfe00); border-style:dashed; " asp-action="GenisIcerik">Sayfayı Yenile</a>
+<h1>Tüm Ürünler</h1>
+<span>@ViewBag.OrnekVeriCantasi</span>
+<span>İlk gelen ürün: @Model.FirstOrDefault().Isim</span>
+
+<table style="border-style:double; width:100%">
+    <thead>
+        <tr>
+            <th>ÜrünID</th>
+            <th>@Html.DisplayNameFor(m=> m.FirstOrDefault().Isim)</th>
+            <th>@Html.DisplayNameFor(m => m.FirstOrDefault().Aciklama)</th>
+            <th>Fiyat</th>
+            <th>Kategori</th>
+            <th>Stok</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Urun urun in Model)
+        {
+            <tr>
+                <td>@urun.UrunID</td>
+                <td>@urun.Isim</td>
+                <td>@urun.Aciklama</td>
+                <td>@($"{urun.Fiyat:C2}")</td>
+                @*C2 kültür ayarlarımızdan para birimini bulup onu yazar. Şu an TL*@
+                <td>@urun.Kategori</td>
+                <td>
+                    @*Nullable int olarak cast ettim ve (?? null coeslesing operatörü ile) null oluyorsa 0 olarak atanmasını sağladım.*@
+                    @switch ((ViewData[urun.Isim +".Stok"] as int?) ?? 0)
+                    {
+                        case 0:<span>Stokta kalmamış</span> break;
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                        case 5: @: Stok bitmek üzere. (@ViewData[urun.Isim + ".Stok"] adet kalmış)
+                        break; @*bu break MUTLAKA BİR ALT SATIRDA olmalı yoksa Razor(tıraş bıçağı:)) sıkıntı çıkarıyor.*@
+                        default:
+                            @ViewData[urun.Isim + ".Stok"] @:adet bulunmakta
+                            break;
+                    }
+                    @* aynı olayı Razor ifadeleri if yapısı ile geliştirdim*@
+
+                    @*@if (ViewBag.MazejikStok == 0)
+                    {
+                        <span>Stokta kalmamış</span>
+                    }
+                    else if (1 <= ViewBag.MazejikStok & ViewBag.MazejikStok <= 5)
+                    {
+                        @: Stok bitmek üzere (@ViewBag.MazejikStok adet kalmış)
+                    }
+                    else
+                    {
+                        @ViewBag.MazejikStok @:adet bulunmakta
+                    }*@
+                </td>
+            </tr>
+        }
+
+    </tbody>
+
+</table>

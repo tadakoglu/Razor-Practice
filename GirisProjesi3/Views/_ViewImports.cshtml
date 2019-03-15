@@ -1,0 +1,8 @@
+﻿@using GirisProjesi3.Models
+
+@*Bu klasörlerin bir referansı View'lerimize yani cshtml dosyalarımıza eklenir*@
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@*Önemli: TagHelpers sınıfındaki tüm etiket yardımcıların sisteme dahil edilmesini sağladım
+Eğer bu referans olarak verilmezsse <a asp-action="metot" asp-controller="kontrol"></a>
+şeklindeki asp- etiket yardımcıları çalışmamaktadır.*@

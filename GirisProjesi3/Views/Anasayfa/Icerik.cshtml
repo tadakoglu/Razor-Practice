@@ -1,0 +1,86 @@
+﻿@*@model GirisProjesi3.Models.Urun*@
+
+@*_ViewImport dosyası oluşturulup içerisine referans eklendi*@
+@*  _ViewImport ve _Layout dosyaları _ ile başlasa güzel adet olur*@
+@model Urun
+
+@{
+    Layout = "_YeniLayout";
+    ViewBag.Title = "Ürün Bilgisi Sayfamız";
+}
+<style>
+    
+</style>
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Icerik</title>
+</head>
+<body>
+    <a style="display:block; background-image: linear-gradient(#c4c200, #edfe00); border-style:dashed; margin:5px " asp-action="Icerik">Sayfayı Yenile</a>
+    <a style="display:block; background-image: linear-gradient(#c4c200, #edfe00); border-style:dashed; margin:5px  " asp-action="GenisIcerik" asp-controller="Anasayfa">Tüm ürünler</a>
+
+    <h1>Ürün Bilgisi</h1>
+    <span>@ViewBag.OrnekVeriCantasi</span>
+    <span>İlk gelen ürün: @((ViewData["Yeniİlaç"] as Urun).Isim)</span>
+
+    <table style="border-style:double; width:100%">
+        <thead>
+            <tr>
+                <th>ÜrünID</th>
+                <th>@nameof(Model.Isim)</th>
+                <th>@nameof(Model.Aciklama)</th>
+                <th>Fiyat</th>
+                <th>Kategori</th>
+                <th>Stok</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr>
+                <td>@Model.UrunID</td>
+                <td>@Model.Isim</td>
+                <td>@Model.Aciklama</td>
+                <td>@($"{Model.Fiyat:C2}")</td>
+                @*C2 kültür ayarlarımızdan para birimini bulup onu yazar. Şu an TL*@
+                <td>@Model.Kategori</td>
+                <td>
+                    @switch (ViewBag.MazejikStok)
+                    {
+                        case 0:<span>Stokta kalmamış</span> break;
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                        case 5: @: Stok bitmek üzere. (@ViewBag.MazejikStok adet kalmış)
+                        break; @*bu break MUTLAKA BİR ALT SATIRDA olmalı yoksa Razor(tıraş bıçağı:)) sıkıntı çıkarıyor.*@
+                        default:
+                            @ViewBag.MazejikStok @:adet bulunmakta
+                            break;
+                    }
+                    @* aynı olayı Razor ifadeleri if yapısı ile geliştirdim*@
+
+                    @*@if (ViewBag.MazejikStok == 0)
+                        {
+                            <span>Stokta kalmamış</span>
+                        }
+                        else if (1 <= ViewBag.MazejikStok & ViewBag.MazejikStok <= 5)
+                        {
+                            @: Stok bitmek üzere (@ViewBag.MazejikStok adet kalmış)
+                        }
+                        else
+                        {
+                            @ViewBag.MazejikStok @:adet bulunmakta
+                        }*@
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+
+
+
+</body>
+</html>
